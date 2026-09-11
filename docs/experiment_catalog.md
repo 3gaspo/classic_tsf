@@ -1,24 +1,27 @@
 # Experiment catalog
 
-## Implemented preparation
+## Available preparation
 
-- Question: can the nine classic non-PEMS panels be consumed through the same
-  saved-Arrow schema and loader as TIME?
-- Entry point: `scripts/prepare_classic_datasets.py`.
-- Output: shared `classic_datasets/<dataset>/<frequency>/` data and catalog
-  provenance.
-- Status: implemented; no forecasting result is produced.
+The nine non-PEMS classic panels can be converted into TIME saved-Arrow data
+with `scripts/prepare_classic_datasets.py`. This produces data and provenance,
+not a forecasting result.
 
-## Shared supervised contract
+## Planned TimeTensors family
 
-Chronological split borders, training-window sampling, context lengths,
-prediction horizons, target representation, objective, and seed ownership
-remain to be selected. These are template-level decisions because every small-
-model child must compare methods on the same data contract.
+The intended port will reproduce the TimeTensors experiment factors and
+baselines on the common classic split/window contract while using TIME storage
+and loading. Exact source revisions, model grid, and commands will be recorded
+when implementation begins.
 
-## Downstream experiment families
+## Planned RevIN family
 
-`classic_tsf` is the first experiment child. It will host TimeTensors- and
-RevIN-like studies using this storage/loading layer. PatchTST, DLinear, and
-other baselines may be added to the shared training surface once their common
-protocol is selected. None is currently implemented by this template.
+The intended port will reproduce the relevant RevIN normalization comparison
+on the same data, horizon, sampling, objective, and seed contract as the
+TimeTensors family. Its exact normalization placement and inversion behavior
+remain to be selected from the source implementation.
+
+## Planned supervised controls
+
+PatchTST and DLinear are intended first controls. No model, split, horizon, or
+training default is currently implemented or implied by the empty catalog
+entries.

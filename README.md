@@ -1,89 +1,53 @@
-# Classic TIME Template
+# Classic TSF Experiments
 
-Classic TIME Template is the reusable layer for supervised experiments on the
-established long-term forecasting datasets. It derives from Improved TIME and
-adds preparation and loading of classic panels through TIME's saved-Arrow
-schema. Experiment repositories such as
-[`classic_tsf`](https://github.com/3gaspo/classic_tsf) inherit this layer and
-own their model grids, cluster launchers, results, and conclusions.
+Classic TSF is the experiment repository for small supervised forecasting
+studies on classic long-term forecasting datasets stored and loaded through
+TIME's saved-Arrow format. It derives from the local Classic TIME Template,
+which receives reusable benchmark changes transitively from Improved TIME.
 
-The dataset scope is Electricity, Traffic, Solar-Energy, Weather, Exchange
-Rate, ETTh1, ETTh2, ETTm1, and ETTm2. PEMS is intentionally excluded.
+The shared dataset scope is Electricity, Traffic, Solar-Energy, Weather,
+Exchange Rate, ETTh1, ETTh2, ETTm1, and ETTm2. PEMS is excluded.
 
 ## Current status
 
-Dataset conversion and loading are implemented. The shared supervised split,
-training-window, horizon, target-mode, objective, and seed contracts have not
-yet been selected. Consequently, the catalog is preparation-ready but not a
-runnable forecasting grid, and this template claims no experimental result.
+The inherited conversion and loading path is available through
+`scripts/prepare_classic_datasets.py`. TimeTensors- and RevIN-like experiment
+ports are planned but not implemented. The supervised split, training-window,
+horizon, target-mode, objective, and seed contracts remain to be selected, so
+no training command or result is currently claimed.
 
-## Dataset preparation
-
-The shared source layout is:
-
-```text
-datasets/
-  electricity/electricity.csv
-  traffic/traffic.csv
-  solar/solar.csv
-  weather/weather.csv
-  exchange_rate/exchange_rate.csv
-  ETTh1/ETTh1.csv
-  ETTh2/ETTh2.csv
-  ETTm1/ETTm1.csv
-  ETTm2/ETTm2.csv
-```
-
-Prepare the nine panels into `datasets/classic_datasets/` with:
+Prepare the shared saved-Arrow datasets with:
 
 ```bash
 PYTHONPATH=src uv run --no-sync python scripts/prepare_classic_datasets.py
 ```
 
-The command discovers each adjacent `config.json`, applies portable fields and
-the existing `classic_tsf` override object, and writes one multivariate
-saved-Arrow dataset per panel plus `classic_datasets/catalog.json` provenance.
-Supported source settings include timestamp/target selection, exclusions,
-aggregation, and the `zero|error` missing-value policy. Infinite values are
-rejected. Solar is aggregated to hourly sums and Weather to hourly means
-through their shared configurations.
+See the inherited [dataset format](docs/DATASET_FORMAT.md) and
+[feature documentation](docs/FEATURES.md) for the reusable data interfaces.
+The dataset catalog at `src/timebench/config/datasets.yaml` intentionally has
+no split lengths or forecast terms yet.
 
-For `drop_users`, omission or `null` inherits the preceding value, `[]` keeps
-all CSV columns, and a non-empty list replaces it. Exclusions are applied only
-during CSV preparation and never again by saved-Arrow consumers. Existing
-prepared datasets are preserved unless `--overwrite` is explicit.
+## Planned experiment layer
 
-## Runtime paths
+This repository will adapt the scientific comparisons from the existing
+TimeTensors and RevIN thesis projects while replacing their data materializing
+and loading path with the efficient TIME representation. The ports will retain
+the source experiment factors and baselines unless an explicit scientific
+change is selected. PatchTST, DLinear, and other supervised controls can share
+the same approved split and window contract.
 
-Within this workspace, `TIME_DATASET` defaults to the shared
-`datasets/classic_datasets/` root and `TIME_METADATA` to
-`datasets/classic_tsf_metadata/`. Standalone checkouts resolve the same names
-below their configured `TIME_DATA_ROOT`. Weights, outputs, and logs remain
-project-scoped and ignored.
+## Documentation
 
-The catalog at
-[`src/timebench/config/datasets.yaml`](src/timebench/config/datasets.yaml)
-contains the nine dataset/frequency keys but deliberately omits split lengths
-and terms. This prevents TIME's three `short|medium|long` labels from silently
-replacing the conventional `96/192/336/720` supervised horizons.
+- [Architecture](docs/architecture.md) identifies inherited and project-owned
+  responsibilities.
+- [Experiment catalog](docs/experiment_catalog.md) records implemented setup
+  and planned scientific families.
+- [Method overview](latex/method_overview.tex) states the intended comparison.
+- [Results recap](docs/results_recap.md) records the current evidence boundary.
 
-## Source tree
-
-```text
-scripts/prepare_classic_datasets.py  CSV/config to TIME saved-Arrow front
-src/timebench/config/                classic dataset catalog
-src/timebench/evaluation/            inherited dataset/window/metric contracts
-src/timebench/pipeline/              inherited task lifecycle contracts
-src/timebench/feature/               inherited dataset diagnostics/features
-src/tests/                            common and classic preparation checks
-datasets/, weights/                   ignored input placeholders
-outputs/, logs/                       ignored artifact placeholders
-```
-
-See [architecture](docs/architecture.md),
-[dataset format](docs/DATASET_FORMAT.md),
-[experiment catalog](docs/experiment_catalog.md), and
-[method overview](latex/method_overview.tex).
+Generated artifacts will belong under this repository's ignored `outputs/`;
+runtime streams will belong under `logs/`. Neither is shared with the parent
+templates or another experiment repository.
 
 The inherited TIME code remains under Apache-2.0. Dataset licenses remain
-those of their original providers and must be reviewed before redistribution.
+those of their original providers.

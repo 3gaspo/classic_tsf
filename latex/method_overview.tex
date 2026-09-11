@@ -3,32 +3,32 @@
 \usepackage[colorlinks=true,linkcolor=blue,urlcolor=blue]{hyperref}
 \setlength{\parindent}{0pt}
 \setlength{\parskip}{3pt}
-\title{Classic TIME Template: Data and Protocol Overview}
+\title{Classic TSF Experiments: Method Overview}
 \author{}
 \date{}
 
 \begin{document}
 \maketitle
 
-\section{Dataset scope}
+\section{Objective}
 
-The template covers Electricity, Traffic, Solar-Energy, Weather, Exchange
-Rate, ETTh1, ETTh2, ETTm1, and ETTm2; PEMS is excluded. Each panel is converted
-once into TIME's multivariate saved-Arrow representation. Source configuration
-controls targets, exclusions, aggregation, and missing-value handling.
+Classic TSF will evaluate TimeTensors- and RevIN-like supervised forecasting
+experiments on Electricity, Traffic, Solar-Energy, Weather, Exchange Rate, and
+the four ETT datasets. PEMS is excluded. Every dataset is stored once in TIME's
+multivariate saved-Arrow representation and consumed through the common TIME
+loader.
 
-\section{Shared supervised contract}
+\section{Comparison contract}
 
-Children will train only on chronological training observations, select models
-using validation observations, and evaluate on held-out test windows. The
-split borders, horizon set, lookback lengths, sampling stride, target mode,
-objective, and seed grid remain intentionally unspecified because they define
-the scientific comparison and must be selected before training code is added.
+All methods will share chronological training, validation, and held-out test
+regions, training-window sampling, lookback lengths, forecast horizons,
+objectives, and run seeds. These choices remain intentionally unspecified and
+will be fixed before model implementation. Ports preserve the corresponding
+source experiment behavior unless an explicit scientific change is recorded.
 
-\section{Ownership}
+\section{Evidence boundary}
 
-This repository owns reusable classic-data preparation and loading. Descendant
-repositories own TimeTensors-, RevIN-, PatchTST-, DLinear-, or other scientific
-experiments and retain their own logs, outputs, reports, and conclusions.
+No result is claimed until the shared protocol, model ports, and baselines are
+implemented and the project-owned artifacts are completed and inspected.
 
 \end{document}
