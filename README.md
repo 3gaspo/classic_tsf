@@ -14,7 +14,9 @@ The inherited conversion and loading path is available through
 `scripts/prepare_classic_datasets.py`. TimeTensors- and RevIN-like experiment
 ports are planned but not implemented. The supervised split, training-window,
 horizon, target-mode, objective, and seed contracts remain to be selected, so
-no training command or result is currently claimed.
+no training command or result is currently claimed. Generic cluster,
+artifact-transfer, Seasonal Naive, diagnostics, grid, and reporting helpers
+are inherited, but they do not define a runnable classic experiment.
 
 Prepare the shared saved-Arrow datasets with:
 

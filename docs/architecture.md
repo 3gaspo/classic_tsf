@@ -11,8 +11,10 @@ classic CSV + config.json
 
 The parent owns conversion, dataset defaults, the classic catalog, TIME
 evaluation, metrics, features, and task lifecycle. This child will own the
-supervised models, optimization, scientific experiment configurations, Slurm
-fronts, result analysis, and reports once they are implemented.
+supervised models, optimization, scientific experiment configurations,
+experiment-specific Slurm fronts and resources, result analysis, and reports
+once they are implemented. Generic cluster, artifact, Seasonal, diagnostic,
+grid, and reporting machinery arrives transitively from Improved TIME.
 
 TimeTensors and RevIN source projects are methodological references, not Git
 parents. Their scientific paths will be ported into explicitly named external
