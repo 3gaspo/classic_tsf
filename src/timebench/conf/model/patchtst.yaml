@@ -1,0 +1,21 @@
+alias: patchtst
+# Official run_longExp.py defaults at the pinned upstream revision.
+# seq_len=L, pred_len=H and enc_in=channels are supplied by the wrapper.
+parameters:
+  e_layers: 2
+  n_heads: 8
+  d_model: 512
+  d_ff: 2048
+  dropout: 0.05
+  fc_dropout: 0.05
+  head_dropout: 0.0
+  individual: false
+  patch_len: 16
+  stride: 8
+  padding_patch: end
+  revin: true
+  affine: false
+  subtract_last: false
+  decomposition: false
+  kernel_size: 25
+model_options: {}

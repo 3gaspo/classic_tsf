@@ -1,0 +1,5 @@
+alias: dlinear
+parameters:
+  individual: false
+# Original DLinear fixes its decomposition kernel to 25 internally.
+model_options: {}

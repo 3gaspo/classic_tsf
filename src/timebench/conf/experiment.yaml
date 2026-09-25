@@ -1,0 +1,16 @@
+# Configuration surface for the context-length study; no training runner yet.
+defaults:
+  - model: patchtst
+  - _self_
+
+dataset_config: null  # uses timebench/config/datasets.yaml
+datasets: [all]
+terms: [short, medium, long]
+context_length: ???  # L belongs to the experiment, never to the task catalog
+seed: ???
+device: cuda
+weights: ${oc.env:TIME_WEIGHTS,weights}
+
+# No optimizer, loss, epoch budget, training stride or validation policy is set.
+# Compare original-scale accuracy, inference seconds and training + inference
+# seconds against the inherited Seasonal Naive and Chronos-2 paths.

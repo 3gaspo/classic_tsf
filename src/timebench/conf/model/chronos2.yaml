@@ -1,0 +1,2 @@
+alias: chronos2
+# The shared adapter loads weights/chronos2 and uses experiment context_length.

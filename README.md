@@ -17,6 +17,9 @@ horizon, target-mode, objective, and seed contracts remain to be selected, so
 no training command or result is currently claimed. Generic cluster,
 artifact-transfer, Seasonal Naive, diagnostics, grid, and reporting helpers
 are inherited, but they do not define a runnable classic experiment.
+The inherited runtime records explicit cgroup availability and the device
+selected by every learned or CPU-only stage; reusable plotting is headless and
+uses an external legend for dense comparisons.
 
 Prepare the shared saved-Arrow datasets with:
 
@@ -50,6 +53,12 @@ the same approved split and window contract.
 Generated artifacts will belong under this repository's ignored `outputs/`;
 runtime streams will belong under `logs/`. Neither is shared with the parent
 templates or another experiment repository.
+
+The inherited lifecycle preserves fully written `computed` task artifacts
+across a later outer failure and finalizes them without recomputation; consumers
+still require `completed`. Compact dependency references and the shared
+finite-context-plus-future validation mask are available when the first classic
+forecasting/selection pipeline is implemented.
 
 The inherited TIME code remains under Apache-2.0. Dataset licenses remain
 those of their original providers.
