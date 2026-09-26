@@ -53,6 +53,10 @@ the same approved split and window contract.
 Generated artifacts will belong under this repository's ignored `outputs/`;
 runtime streams will belong under `logs/`. Neither is shared with the parent
 templates or another experiment repository.
+Those are the default roots (project scratch on Selena); explicit
+`OUTPUTS_ROOT` and `LOGS_ROOT` overrides are honored. Shared Seasonal artifacts
+and logs are the deliberate exception, selected through the inherited
+Seasonal path contract and consumed through `TIME_SEASONAL_TASKS_ROOT`.
 
 The inherited lifecycle preserves fully written `computed` task artifacts
 across a later outer failure and finalizes them without recomputation; consumers
