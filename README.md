@@ -50,11 +50,11 @@ the same approved split and window contract.
 - [Method overview](latex/method_overview.tex) states the intended comparison.
 - [Results recap](docs/results_recap.md) records the current evidence boundary.
 
-Generated artifacts will belong under this repository's ignored `outputs/`;
-runtime streams will belong under `logs/`. Neither is shared with the parent
-templates or another experiment repository.
-Those are the default roots (project scratch on Selena); explicit
-`OUTPUTS_ROOT` and `LOGS_ROOT` overrides are honored. Shared Seasonal artifacts
+Generated artifacts use `outputs/dgx/` for DGX/local execution and
+`outputs/selena/` after Selena synchronization; runtime records use the
+matching `logs/<surface>/` root. Selena jobs write to this project's scratch
+`outputs/` and `logs/` roots. Neither tree is shared with a parent or sibling.
+Explicit `OUTPUTS_ROOT` and `LOGS_ROOT` overrides are honored. Shared Seasonal artifacts
 and logs are the deliberate exception, selected through the inherited
 Seasonal path contract and consumed through `TIME_SEASONAL_TASKS_ROOT`.
 
@@ -63,6 +63,12 @@ across a later outer failure and finalizes them without recomputation; consumers
 still require `completed`. Compact dependency references and the shared
 finite-context-plus-future validation mask are available when the first classic
 forecasting/selection pipeline is implemented.
+
+Inherited experiment artifacts use `<O>/<experiment>/...`, reports use
+`<O>/<experiment>/reports/`, and runtime streams, Hydra files, stage logs, and
+workflow status stay below `logs/<surface>/<experiment>/`. Run directories use
+`manifest.json` as their authoritative scientific configuration and lifecycle
+record; launch IDs and timestamps remain in manifests and logs.
 
 The inherited TIME code remains under Apache-2.0. Dataset licenses remain
 those of their original providers.

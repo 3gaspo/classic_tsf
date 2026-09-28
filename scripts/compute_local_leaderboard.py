@@ -45,40 +45,6 @@ HF_OUTPUT_REPO_ID = "Real-TSF/TIME-Output"
 SEASONAL_NAIVE_MODEL = "seasonal_naive"
 
 
-def check_local_seasonal_naive(results_dir: Path) -> Optional[Path]:
-    """
-    Check if Seasonal Naive results exist locally.
-
-    Args:
-        results_dir: Path to an experiment's task directory.
-
-    Returns:
-        Path to results directory if found, None otherwise
-    """
-    seasonal_naive_path = results_dir / SEASONAL_NAIVE_MODEL
-    if seasonal_naive_path.exists() and seasonal_naive_path.is_dir():
-        # Check if it contains at least one dataset result
-        has_results = False
-        for dataset_dir in seasonal_naive_path.iterdir():
-            if dataset_dir.is_dir():
-                # Check if it has freq subdirectories with horizon results
-                for freq_dir in dataset_dir.iterdir():
-                    if freq_dir.is_dir():
-                        for horizon in ["short", "medium", "long"]:
-                            config_path = freq_dir / horizon / "config.json"
-                            if config_path.exists():
-                                has_results = True
-                                break
-                        if has_results:
-                            break
-                if has_results:
-                    break
-
-        if has_results:
-            return results_dir
-    return None
-
-
 def download_seasonal_naive_results(cache_dir: Optional[str] = None) -> Path:
     """
     Download Seasonal Naive results from HuggingFace Hub.
@@ -124,25 +90,16 @@ def load_time_results(root_dir: Path, model_name: str, dataset_with_freq: str, h
         horizon: Horizon name (e.g., "short", "medium", "long")
 
     Returns:
-        tuple: (metrics_dict, config_dict) or (None, None) if not found
+        Metric arrays, or None when no result exists.
     """
     horizon_dir = root_dir / model_name / dataset_with_freq / horizon
     metrics_path = horizon_dir / "metrics.npz"
-    config_path = horizon_dir / "config.json"
 
     if not metrics_path.exists():
-        return None, None
+        return None
 
     metrics = np.load(metrics_path)
-    metrics_dict = {k: metrics[k] for k in metrics.files}
-
-    config_dict = {}
-    if config_path.exists():
-        import json
-        with open(config_path, "r") as f:
-            config_dict = json.load(f)
-
-    return metrics_dict, config_dict
+    return {key: metrics[key] for key in metrics.files}
 
 
 def get_all_datasets_results(results_root: Path) -> pd.DataFrame:
@@ -183,7 +140,9 @@ def get_all_datasets_results(results_root: Path) -> pd.DataFrame:
 
                 for horizon in ["short", "medium", "long"]:
                     dataset_with_freq = f"{dataset_name}/{freq_name}"
-                    metrics_dict, _ = load_time_results(results_root, model_name, dataset_with_freq, horizon)
+                    metrics_dict = load_time_results(
+                        results_root, model_name, dataset_with_freq, horizon
+                    )
 
                     if metrics_dict is None:
                         continue
@@ -218,8 +177,8 @@ def get_manifest_datasets_results(
     target_modes: set[str] | None = None,
     launch_id: str | None = None,
     config_filters: dict | None = None,
-    config_policy: str = "error",
-    repeat_policy: str = "selected",
+    config_policy: str = "latest",
+    repeat_policy: str = "latest",
 ) -> pd.DataFrame:
     """Load current TIME results through completed run manifests."""
     rows = []
@@ -510,12 +469,12 @@ def main():
     parser.add_argument(
         "--config-policy",
         choices=("error", "distinct", "latest", "average"),
-        default="error",
+        default="latest",
     )
     parser.add_argument(
         "--repeat-policy",
         choices=("selected", "latest", "distinct", "average"),
-        default="selected",
+        default="latest",
     )
     args = parser.parse_args()
 
@@ -634,5 +593,4 @@ def main():
 
 if __name__ == "__main__":
     main()
-
 
