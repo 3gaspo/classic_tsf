@@ -11,10 +11,11 @@ Exchange Rate, ETTh1, ETTh2, ETTm1, and ETTm2. PEMS is excluded.
 ## Current status
 
 The inherited conversion and loading path is available through
-`scripts/prepare_classic_datasets.py`. TimeTensors- and RevIN-like experiment
-ports are planned but not implemented. The supervised split, training-window,
-horizon, target-mode, objective, and seed contracts remain to be selected, so
-no training command or result is currently claimed. Generic cluster,
+`scripts/prepare_classic_datasets.py`. Chronological test blocks and
+frequency-specific `short|medium|long` horizons are selected. TimeTensors- and
+RevIN-like experiment ports are planned but not implemented; training windows,
+target modes, objectives, and seeds remain to be selected, so no training
+command or result is currently claimed. Generic cluster,
 artifact-transfer, Seasonal Naive, diagnostics, grid, and reporting helpers
 are inherited, but they do not define a runnable classic experiment.
 The inherited runtime records explicit cgroup availability and the device
@@ -29,8 +30,8 @@ PYTHONPATH=src uv run --no-sync python scripts/prepare_classic_datasets.py
 
 See the inherited [dataset format](docs/DATASET_FORMAT.md) and
 [feature documentation](docs/FEATURES.md) for the reusable data interfaces.
-The dataset catalog at `src/timebench/config/datasets.yaml` intentionally has
-no split lengths or forecast terms yet.
+The dataset catalog at `src/timebench/config/datasets.yaml` records the selected
+test lengths and forecast terms.
 
 ## Planned experiment layer
 
@@ -54,9 +55,10 @@ Generated artifacts use `outputs/dgx/` for DGX/local execution and
 `outputs/selena/` after Selena synchronization; runtime records use the
 matching `logs/<surface>/` root. Selena jobs write to this project's scratch
 `outputs/` and `logs/` roots. Neither tree is shared with a parent or sibling.
-Explicit `OUTPUTS_ROOT` and `LOGS_ROOT` overrides are honored. Shared Seasonal artifacts
-and logs are the deliberate exception, selected through the inherited
-Seasonal path contract and consumed through `TIME_SEASONAL_TASKS_ROOT`.
+Explicit `OUTPUTS_ROOT` and `LOGS_ROOT` overrides are honored. The independent
+shared Seasonal checkout stores artifacts below `outputs/seasonal_naive/` and
+logs below `logs/seasonal_naive/`; this project consumes completed evaluations
+through `TIME_SEASONAL_EVALUATIONS_ROOT`.
 
 The inherited lifecycle preserves fully written `computed` task artifacts
 across a later outer failure and finalizes them without recomputation; consumers
