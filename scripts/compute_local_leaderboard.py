@@ -469,7 +469,7 @@ def main():
     parser.add_argument(
         "--config-policy",
         choices=("error", "distinct", "latest", "average"),
-        default="latest",
+        default="error",
     )
     parser.add_argument(
         "--repeat-policy",
@@ -593,4 +593,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
